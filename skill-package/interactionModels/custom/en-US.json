@@ -34,11 +34,110 @@
             }
           ],
           "samples": [
+            "name is {name}",
+            "i'd like you to meet {name}",
+            "my pet's name is {name}",
+            "it's {name}",
             "this is {name}"
+          ]
+        },
+        {
+          "name": "LogEventIntent",
+          "slots": [
+            {
+              "name": "verb",
+              "type": "PetActivities",
+              "samples": [
+                "I'd like to {verb} {name}",
+                "please {verb} {name}",
+                "{verb} {name}"
+              ]
+            },
+            {
+              "name": "name",
+              "type": "AMAZON.FirstName",
+              "samples": [
+                "{name}"
+              ]
+            }
+          ],
+          "samples": [
+            "{verb} {name}"
           ]
         }
       ],
-      "types": []
+      "types": [
+        {
+          "values": [
+            {
+              "name": {
+                "value": "meds"
+              }
+            },
+            {
+              "name": {
+                "value": "pill"
+              }
+            },
+            {
+              "name": {
+                "value": "medication"
+              }
+            },
+            {
+              "name": {
+                "value": "eating"
+              }
+            },
+            {
+              "name": {
+                "value": "snack"
+              }
+            },
+            {
+              "name": {
+                "value": "eaten"
+              }
+            },
+            {
+              "name": {
+                "value": "ate"
+              }
+            },
+            {
+              "name": {
+                "value": "dine"
+              }
+            },
+            {
+              "name": {
+                "value": "breakfast"
+              }
+            },
+            {
+              "name": {
+                "value": "lunch"
+              }
+            },
+            {
+              "name": {
+                "value": "dinner"
+              }
+            },
+            {
+              "name": {
+                "value": "eat"
+              }
+            },
+            {
+              "name": {
+                "value": "feed"
+              }
+            }
+          ],
+          "name": "PetActivities"
+        }
+      ]
     },
     "dialog": {
       "intents": [
@@ -57,6 +156,31 @@
               }
             }
           ]
+        },
+        {
+          "name": "LogEventIntent",
+          "confirmationRequired": false,
+          "prompts": {},
+          "slots": [
+            {
+              "name": "verb",
+              "type": "PetActivities",
+              "elicitationRequired": true,
+              "confirmationRequired": false,
+              "prompts": {
+                "elicitation": "Elicit.Slot.1280259576977.495715207880"
+              }
+            },
+            {
+              "name": "name",
+              "type": "AMAZON.FirstName",
+              "elicitationRequired": true,
+              "confirmationRequired": false,
+              "prompts": {
+                "elicitation": "Elicit.Slot.1192980823895.663630553795"
+              }
+            }
+          ]
         }
       ],
       "delegationStrategy": "ALWAYS"
@@ -70,8 +194,26 @@
             "value": "I'm sorry, can you repeat your pet's name?"
           }
         ]
+      },
+      {
+        "id": "Elicit.Slot.1280259576977.495715207880",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "I'm sorry, what did you want me to do for {name} ?"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.1192980823895.663630553795",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "I'm sorry, I didn't understand your pet's name correctly.  Could you repeat that?"
+          }
+        ]
       }
     ]
   },
-  "version": "3"
+  "version": "7"
 }

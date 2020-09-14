@@ -14,9 +14,7 @@ const LaunchRequestHandler = {
       const sessionAttributes = await attributesManager.getPersistentAttributes() || {};
 
       if (sessionAttributes !== {}) {
-        const name = sessionAttributes.keys()[0];
-
-        const speakOutput = `Hello, welcome back to Fat Cat.  Would you like me to log an event for ${name}?`;
+        const speakOutput = `Hello, welcome back to Fat Cat.  Is it time to feed your pet?`;
         const repromptOutput = `I'm sorry, I didn't understand.  
         I can log a new event or tell you about an existing event.  Which would you like?`;
         return handlerInput.responseBuilder
