@@ -10,7 +10,7 @@ const LaunchRequestHandler = {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'LaunchRequest';
     },
     handle(handlerInput) {
-        const speakOutput = 'Hello, I can help you track your pet activities.  To begin, just introduce me to your pet!';
+        const speakOutput = 'Hello, welcome to Fat Cat.  To begin, introduce me to your pet!';
         const repromptOutput = `My pet's name is Tango, what's yours?`;
         return handlerInput.responseBuilder
             .speak(speakOutput)
