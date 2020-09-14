@@ -10,12 +10,22 @@ const LaunchRequestHandler = {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'LaunchRequest';
     },
     handle(handlerInput) {
+      const attributesManager = handlerInput.attributesManager;
+      const sessionAttributes = await attributesManager.getPersistentAttributes() || {};
+
+      if (sessionAttributes !== {}) {
+        const speakOutput = 'Hello, welcome back to Fat Cat.  To begin, introduce me to your pet!';
+        return handlerInput.responseBuilder
+            .speak(speakOutput)
+            .getResponse();
+      } else {
         const speakOutput = 'Hello, welcome to Fat Cat.  To begin, introduce me to your pet!';
-        const repromptOutput = `My pet's name is Tango, what's yours?`;
+        const repromptOutput = `I'm sorry, I didn't understand that.  My pet's name is Tango, what's yours?`;
         return handlerInput.responseBuilder
             .speak(speakOutput)
             .reprompt(repromptOutput)
             .getResponse();
+      }
     }
 };
 
@@ -30,7 +40,7 @@ const RegisterPetIntentHandler = {
     const attributesManager = handlerInput.attributesManager;
     const sessionAttributes = await attributesManager.getPersistentAttributes() || {};
 
-    if (sessionAttributes.name) {
+    if (sessionAttributes[name]) {
       const existsOutput = `I think we've already met, hello ${name}`
 
       return handlerInput.responseBuilder
