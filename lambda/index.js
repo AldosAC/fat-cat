@@ -30,17 +30,22 @@ const RegisterPetIntentHandler = {
     const attributesManager = handlerInput.attributesManager;
     const sessionAttributes = await attributesManager.getPersistentAttributes() || {};
 
-    sessionAttributes[name] = pet;
+    if (sessionAttributes.name) {
+      const existsOutput = `I think we've already met, hello ${name}`
 
-    await attributesManager.setPersistentAttributes(sessionAttributes);
+      return handlerInput.responseBuilder
+        .speak(existsOutput)
+        .getResponse();
+    } else {
+      sessionAttributes[name] = pet;
 
-    const speakOutput = `It's nice to meet you ${name}!`
-    return handlerInput.responseBuilder
-      .speak(speakOutput)
-      .getResponse();
+      await attributesManager.setPersistentAttributes(sessionAttributes);
 
-    // Implement pet already exists error handling
-    
+      const speakOutput = `It's nice to meet you ${name}!`
+      return handlerInput.responseBuilder
+        .speak(speakOutput)
+        .getResponse();
+    }
   }
 };
 
