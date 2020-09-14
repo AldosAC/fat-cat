@@ -17,6 +17,7 @@ const LaunchRequestHandler = {
         const speakOutput = `Hello, welcome back to Fat Cat.  Is it time to feed your pet?`;
         const repromptOutput = `I'm sorry, I didn't understand.  
         I can log a new event or tell you about an existing event.  Which would you like?`;
+
         console.log(`Session Attributes: ${sessionAttributes}`);
 
         return handlerInput.responseBuilder
@@ -56,6 +57,7 @@ const RegisterPetIntentHandler = {
       sessionAttributes[name] = pet;
       console.log(`Registered new pet`);
 
+      console.log(`S3 Bucket Name: ${process.env.S3_PERSISTENCE_BUCKET}`)
       await attributesManager.setPersistentAttributes(sessionAttributes);
       await attributesManager.savePersistentAttributes();
 
