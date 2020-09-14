@@ -14,9 +14,14 @@ const LaunchRequestHandler = {
       const sessionAttributes = await attributesManager.getPersistentAttributes() || {};
 
       if (sessionAttributes !== {}) {
-        const speakOutput = 'Hello, welcome back to Fat Cat.  To begin, introduce me to your pet!';
+        const name = sessionAttributes.keys()[0];
+
+        const speakOutput = `Hello, welcome back to Fat Cat.  Would you like me to log an event for ${name}?`;
+        const repromptOutput = `I'm sorry, I didn't understand.  
+        I can log a new event or tell you about an existing event.  Which would you like?`;
         return handlerInput.responseBuilder
             .speak(speakOutput)
+            .reprompt(repromptOutput)
             .getResponse();
       } else {
         const speakOutput = 'Hello, welcome to Fat Cat.  To begin, introduce me to your pet!';
@@ -95,6 +100,15 @@ const SessionEndedRequestHandler = {
         return handlerInput.responseBuilder.getResponse();
     }
 };
+
+const ResetDataIntentHandler = {
+  canHandle(handlerInput) {
+
+  },
+  handle(handlerInput) {
+
+  }
+}
 
 // The intent reflector is used for interaction model testing and debugging.
 // It will simply repeat the intent the user said. You can create custom handlers
