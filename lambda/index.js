@@ -3,7 +3,7 @@
 // session persistence, api calls, and more.
 const Alexa = require('ask-sdk-core');
 const persistenceAdapter = require('ask-sdk-s3-persistence-adapter');
-const { Pet } = require('./data/newPet');
+const { Pet } = require('./data/Pet');
 
 const LaunchRequestHandler = {
     canHandle(handlerInput) {
@@ -30,11 +30,9 @@ const RegisterPetIntentHandler = {
     const attributesManager = handlerInput.attributesManager;
     const sessionAttributes = await attributesManager.getPersistentAttributes() || {};
 
-    if (sessionAttributes.pets) {
-      sessionAttributes.pet[name] = pet;
-    } else {
-      sessionAttributes.pet = { [name]: pet };
-    }
+    sessionAttributes[name] = pet;
+
+    await attributesManager.setPersistentAttributes(sessionAttributes);
 
     const speakOutput = `It's nice to meet you ${name}!`
     return handlerInput.responseBuilder
