@@ -18,7 +18,7 @@ const LaunchRequestHandler = {
         const repromptOutput = `I'm sorry, I didn't understand.  
         I can log a new event or tell you about an existing event.  Which would you like?`;
 
-        console.log(`Session Attributes: ${sessionAttributes}`);
+        console.log(`Session Attributes: ${JSON.stringify(sessionAttributes)}`);
 
         return handlerInput.responseBuilder
             .speak(speakOutput)
