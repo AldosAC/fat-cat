@@ -47,12 +47,14 @@ const RegisterPetIntentHandler = {
 
     if (sessionAttributes[name]) {
       const existsOutput = `I think we've already met, hello ${name}`
+      console.log(`Register conflict: Pet exists`);
 
       return handlerInput.responseBuilder
         .speak(existsOutput)
         .getResponse();
     } else {
       sessionAttributes[name] = pet;
+      console.log(`Registered new pet`);
 
       await attributesManager.setPersistentAttributes(sessionAttributes);
 
