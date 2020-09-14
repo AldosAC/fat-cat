@@ -95,8 +95,9 @@ const SessionEndedRequestHandler = {
     canHandle(handlerInput) {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'SessionEndedRequest';
     },
-    handle(handlerInput) {
+    async handle(handlerInput) {
         // Any cleanup logic goes here.
+        await handlerInput.sessionAttributes.savePersistentAttributes();
         return handlerInput.responseBuilder.getResponse();
     }
 };
