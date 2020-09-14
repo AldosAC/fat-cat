@@ -21,7 +21,7 @@ const LaunchRequestHandler = {
 
 const RegisterPetIntentHandler = {
   canHandle(handlerInput) {
-    return Alexa.getRequestType(handlerInput.requestEnvelope) === 'LaunchRequest' 
+    return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest' 
     && handlerInput.requestEnvelope.request.intent.name === 'RegisterPetIntent';
   },
   async handle(handlerInput) {
