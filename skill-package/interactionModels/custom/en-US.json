@@ -20,7 +20,7 @@
           "samples": []
         },
         {
-          "name": "CapturePetNameIntent",
+          "name": "RegisterPetIntent",
           "slots": [
             {
               "name": "name",
@@ -43,7 +43,7 @@
     "dialog": {
       "intents": [
         {
-          "name": "CapturePetNameIntent",
+          "name": "RegisterPetIntent",
           "confirmationRequired": false,
           "prompts": {},
           "slots": [
@@ -73,5 +73,5 @@
       }
     ]
   },
-  "version": "2"
+  "version": "3"
 }
