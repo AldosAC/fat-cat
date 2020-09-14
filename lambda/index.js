@@ -2,6 +2,7 @@
 // Please visit https://alexa.design/cookbook for additional examples on implementing slots, dialog management,
 // session persistence, api calls, and more.
 const Alexa = require('ask-sdk-core');
+const { Pet } = require('./data/newPet');
 
 const LaunchRequestHandler = {
     canHandle(handlerInput) {
@@ -17,13 +18,30 @@ const LaunchRequestHandler = {
     }
 };
 
-const CapturePetNameIntentHandler = {
+const RegisterPetIntentHandler = {
   canHandle(handlerInput) {
     return Alexa.getRequestType(handlerInput.requestEnvelope) === 'LaunchRequest' 
-    && handlerInput.requestEnvelope.request.intent.name === 'CapturePetNameIntent';
+    && handlerInput.requestEnvelope.request.intent.name === 'RegisterPetIntent';
   },
-  handle(handlerInput) {
+  async handle(handlerInput) {
+    const name = handlerInput.requestEnvelope.request.intent.slots.name.value;
+    const pet = new Pet(name);
+    const attributesManager = handlerInput.attributesManager;
+    const sessionAttributes = await attributesManager.getPersistentAttributes() || {};
 
+    if (sessionAttributes.pets) {
+      sessionAttributes.pet[name] = pet;
+    } else {
+      sessionAttributes.pet = { [name]: pet };
+    }
+
+    const speakOutput = `It's nice to meet you ${name}!`
+    return handlerInput.responseBuilder
+      .speak(speakOutput)
+      .getResponse();
+
+    // Implement pet already exists error handling
+    
   }
 }
 
@@ -105,9 +123,12 @@ const ErrorHandler = {
 // payloads to the handlers above. Make sure any new handlers or interceptors you've
 // defined are included below. The order matters - they're processed top to bottom.
 exports.handler = Alexa.SkillBuilders.custom()
+    .withPersistenceAdapter(
+      new persistenceAdapter.S3PersistenceAdapter({bucketName:process.env.S3_PERSISTENCE_BUCKET})
+    )
     .addRequestHandlers(
         LaunchRequestHandler,
-        HelloWorldIntentHandler,
+        RegisterPetIntentHandler,
         HelpIntentHandler,
         CancelAndStopIntentHandler,
         SessionEndedRequestHandler,
