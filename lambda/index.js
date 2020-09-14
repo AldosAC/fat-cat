@@ -17,6 +17,8 @@ const LaunchRequestHandler = {
         const speakOutput = `Hello, welcome back to Fat Cat.  Is it time to feed your pet?`;
         const repromptOutput = `I'm sorry, I didn't understand.  
         I can log a new event or tell you about an existing event.  Which would you like?`;
+        console.log(`Session Attributes: ${sessionAttributes}`);
+
         return handlerInput.responseBuilder
             .speak(speakOutput)
             .reprompt(repromptOutput)
@@ -55,6 +57,7 @@ const RegisterPetIntentHandler = {
       console.log(`Registered new pet`);
 
       await attributesManager.setPersistentAttributes(sessionAttributes);
+      await attributesManager.savePersistentAttributes();
 
       const speakOutput = `It's nice to meet you ${name}!`
       return handlerInput.responseBuilder
@@ -97,7 +100,7 @@ const SessionEndedRequestHandler = {
     },
     async handle(handlerInput) {
         // Any cleanup logic goes here.
-        await handlerInput.sessionAttributes.savePersistentAttributes();
+        await handlerInput.attributesManager.savePersistentAttributes();
         return handlerInput.responseBuilder.getResponse();
     }
 };
