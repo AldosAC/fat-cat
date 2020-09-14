@@ -1,27 +1,76 @@
 {
   "interactionModel": {
-    "languageModel": {
-      "invocationName": "fat cat",
-      "intents": [
-        {
-          "name": "AMAZON.CancelIntent",
-          "samples": []
-        },
-        {
-          "name": "AMAZON.HelpIntent",
-          "samples": []
-        },
-        {
-          "name": "AMAZON.StopIntent",
-          "samples": []
-        },
-        {
-          "name": "AMAZON.NavigateHomeIntent",
-          "samples": []
-        }
-      ],
-      "types": []
-    }
-  },
-  "version": "1"
+      "languageModel": {
+          "invocationName": "fat cat",
+          "intents": [
+              {
+                  "name": "AMAZON.CancelIntent",
+                  "samples": []
+              },
+              {
+                  "name": "AMAZON.HelpIntent",
+                  "samples": []
+              },
+              {
+                  "name": "AMAZON.StopIntent",
+                  "samples": []
+              },
+              {
+                  "name": "AMAZON.NavigateHomeIntent",
+                  "samples": []
+              },
+              {
+                  "name": "CapturePetNameIntent",
+                  "slots": [
+                      {
+                          "name": "name",
+                          "type": "AMAZON.FirstName",
+                          "samples": [
+                              "my pet's name is {name}",
+                              "my cat's name is {name}",
+                              "it's {name}",
+                              "{name}"
+                          ]
+                      }
+                  ],
+                  "samples": [
+                      "this is {name}"
+                  ]
+              }
+          ],
+          "types": []
+      },
+      "dialog": {
+          "intents": [
+              {
+                  "name": "CapturePetNameIntent",
+                  "confirmationRequired": false,
+                  "prompts": {},
+                  "slots": [
+                      {
+                          "name": "name",
+                          "type": "AMAZON.FirstName",
+                          "confirmationRequired": false,
+                          "elicitationRequired": true,
+                          "prompts": {
+                              "elicitation": "Elicit.Slot.324727891674.1397281806898"
+                          }
+                      }
+                  ]
+              }
+          ],
+          "delegationStrategy": "ALWAYS"
+      },
+      "prompts": [
+          {
+              "id": "Elicit.Slot.324727891674.1397281806898",
+              "variations": [
+                  {
+                      "type": "PlainText",
+                      "value": "I'm sorry, can you repeat your pet's name?"
+                  }
+              ]
+          }
+      ]
+  }
 }
