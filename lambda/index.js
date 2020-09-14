@@ -9,7 +9,7 @@ const LaunchRequestHandler = {
     canHandle(handlerInput) {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'LaunchRequest';
     },
-    handle(handlerInput) {
+    async handle(handlerInput) {
       const attributesManager = handlerInput.attributesManager;
       const sessionAttributes = await attributesManager.getPersistentAttributes() || {};
 
