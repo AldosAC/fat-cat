@@ -11,9 +11,9 @@ const LaunchRequestHandler = {
     },
     async handle(handlerInput) {
       const attributesManager = handlerInput.attributesManager;
-      const sessionAttributes = await attributesManager.getSessionAttributes() || {};
+      const sessionAttributes = await attributesManager.getSessionAttributes() || { pets: [], logs: {} };
 
-      if (sessionAttributes !== {}) {
+      if (sessionAttributes.pets.length > 0) {
         const speakOutput = `Hello, welcome back to Fat Cat.  Is it time to feed your pet?`;
         const repromptOutput = `I'm sorry, I didn't understand.  
         I can log a new event or tell you about an existing event.  Which would you like?`;
@@ -109,7 +109,7 @@ const SessionEndedRequestHandler = {
 const LoadPetInfoInterceptor = {
   async process(handlerInput) {
     const attributesManager = handlerInput.attributesManager;
-    const sessionAttributes = await attributesManager.getPersistentAttributes() || {};
+    const sessionAttributes = await attributesManager.getPersistentAttributes() || { pets: [], logs: {} };
 
     const pets = sessionAttributes.hasOwnProperty(pets) ? sessionAttributes.pets : [];
     const logs = sessionAttributes.hasOwnProperty(logs) ? sessionAttributes.logs : {};
