@@ -112,6 +112,7 @@ const LoadPetInfoInterceptor = {
     const sessionAttributes = await attributesManager.getPersistentAttributes();
 
     if (sessionAttributes === {}) {
+        console.log(`Session attributes are empty, initializing`)
       sessionAttributes.pets = [];
       sessionAttributes.logs = {};
     }
