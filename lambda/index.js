@@ -11,7 +11,7 @@ const LaunchRequestHandler = {
     },
     async handle(handlerInput) {
       const attributesManager = handlerInput.attributesManager;
-      const sessionAttributes = await attributesManager.getPersistentAttributes() || {};
+      const sessionAttributes = await attributesManager.getSessionAttributes() || {};
 
       if (sessionAttributes !== {}) {
         const speakOutput = `Hello, welcome back to Fat Cat.  Is it time to feed your pet?`;
@@ -42,11 +42,10 @@ const RegisterPetIntentHandler = {
   },
   async handle(handlerInput) {
     const name = handlerInput.requestEnvelope.request.intent.slots.name.value;
-    const pet = new Pet(name);
     const attributesManager = handlerInput.attributesManager;
-    const sessionAttributes = await attributesManager.getPersistentAttributes() || {};
+    const sessionAttributes = await attributesManager.getSessionAttributes() || { pets: [], logs: {} };
 
-    if (sessionAttributes[name]) {
+    if (sessionAttributes.pets[name]) {
       const existsOutput = `I think we've already met, hello ${name}`
       console.log(`Register conflict: Pet exists`);
 
@@ -54,12 +53,12 @@ const RegisterPetIntentHandler = {
         .speak(existsOutput)
         .getResponse();
     } else {
-      sessionAttributes[name] = pet;
+      sessionAttributes.pets.push(name);
+      sessionAttributes.logs[name] = new Pet(name);
       console.log(`Registered new pet`);
 
       console.log(`S3 Bucket Name: ${process.env.S3_PERSISTENCE_BUCKET}`)
       await attributesManager.setPersistentAttributes(sessionAttributes);
-      await attributesManager.savePersistentAttributes();
 
       const speakOutput = `It's nice to meet you ${name}!`
       return handlerInput.responseBuilder
@@ -107,12 +106,17 @@ const SessionEndedRequestHandler = {
     }
 };
 
-const ResetDataIntentHandler = {
-  canHandle(handlerInput) {
+const LoadPetInfoInterceptor = {
+  async process(handlerInput) {
+    const attributesManager = handlerInput.attributesManager;
+    const sessionAttributes = await attributesManager.getPersistentAttributes() || {};
 
-  },
-  handle(handlerInput) {
+    const pets = sessionAttributes.hasOwnProperty(pets) ? sessionAttributes.pets : [];
+    const logs = sessionAttributes.hasOwnProperty(logs) ? sessionAttributes.logs : {};
 
+    if (pets && logs) {
+      attributesManager.setSessionAttributes(sessionAttributes);
+    }
   }
 }
 
@@ -161,14 +165,17 @@ exports.handler = Alexa.SkillBuilders.custom()
       new persistenceAdapter.S3PersistenceAdapter({bucketName:process.env.S3_PERSISTENCE_BUCKET})
     )
     .addRequestHandlers(
-        LaunchRequestHandler,
-        RegisterPetIntentHandler,
-        HelpIntentHandler,
-        CancelAndStopIntentHandler,
-        SessionEndedRequestHandler,
-        IntentReflectorHandler, // make sure IntentReflectorHandler is last so it doesn't override your custom intent handlers
+      LaunchRequestHandler,
+      RegisterPetIntentHandler,
+      HelpIntentHandler,
+      CancelAndStopIntentHandler,
+      SessionEndedRequestHandler,
+      IntentReflectorHandler, // make sure IntentReflectorHandler is last so it doesn't override your custom intent handlers
+    )
+    .addRequestInterceptors(
+      LoadPetInfoInterceptor,
     )
     .addErrorHandlers(
-        ErrorHandler,
+      ErrorHandler,
     )
     .lambda();
