@@ -117,7 +117,7 @@ const LoadPetInfoInterceptor = {
       sessionAttributes.logs = {};
     }
 
-    console.log(`Session Attributes: ${JSON.stringify(sessionAttributes)}`);
+    console.log(`Session Attributes - init: ${JSON.stringify(sessionAttributes)}`);
     attributesManager.setSessionAttributes(sessionAttributes);
   }
 }
