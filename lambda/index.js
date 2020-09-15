@@ -113,7 +113,6 @@ const HasEatenTodayIntentHandler = {
     const name = handlerInput.requestEnvelope.request.intent.slots.name.value;
     const attributesManager = handlerInput.attributesManager;
     const sessionAttributes = await attributesManager.getSessionAttributes();
-    const { events } = sessionAttributes.logs[name];
     const timeStamp = await getTimeStamp(handlerInput);
     let lastFedTime;
     let hasEaten = false;
@@ -122,6 +121,16 @@ const HasEatenTodayIntentHandler = {
     if (timeStamp.name) {
       return handlerInput.responseBuilder.speak("There was a problem connecting to the service.").getResponse();
     }
+
+    if (sessionAttributes.logs[name] === undefined) {
+      const petNotFoundOutput = `I'm sorry, I don't think I've met ${name} yet.  Would you mind introducing us?`;
+
+      return handlerInput.responseBuilder
+        .speak(petNotFoundOutput)
+        .getResponse();
+    }
+
+    const { events } = sessionAttributes.logs[name];
 
     if (events.length > 0) {
       lastFedTime = new Date(events[events.length - 1].time);
