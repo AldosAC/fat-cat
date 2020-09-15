@@ -6,6 +6,7 @@ const persistenceAdapter = require('ask-sdk-s3-persistence-adapter');
 const { Pet } = require('./data/Pet');
 const { getTimeStamp } = require('./models/getTimeStamp');
 const { compareDates } = require('./controllers/compareDates');
+const { formatTime } = require('./models/formatTime');
 
 const LaunchRequestHandler = {
   canHandle(handlerInput) {
@@ -169,9 +170,7 @@ LastFedIntentHandler = {
     }
 
     const lastFedTimeStamp = new Date(events[events.length - 1].time);
-    const lastFedDay = lastFedTimeStamp.getDay();
-    const lastFedMonth = lastFedTimeStamp.getMonth();
-    const lastFedTime = { hour: lastFedTimeStamp.getHours(), minutes: lastFedTimeStamp.getMinutes()}
+    const lastFedTime = formatTime(lastFedTimeStamp);
     const timeStamp = await getTimeStamp(handlerInput);
     let daysSinceLastFed = compareDates(timeStamp, lastFedTimeStamp);
 
