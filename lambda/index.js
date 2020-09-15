@@ -125,6 +125,9 @@ const SessionEndedRequestHandler = {
   },
   async handle(handlerInput) {
     // Any cleanup logic goes here.
+    const sessionAttributes = await handlerInput.attributesManager.getPersistentAttributes();
+    console.log(`Final attributes: ${JSON.stringify(sessionAttributes)}`);
+
     await handlerInput.attributesManager.savePersistentAttributes();
     return handlerInput.responseBuilder.getResponse();
   }
