@@ -15,11 +15,12 @@ const LaunchRequestHandler = {
   async handle(handlerInput) {
     const attributesManager = handlerInput.attributesManager;
     const sessionAttributes = await attributesManager.getSessionAttributes();
+    const [name] = sessionAttributes.pets;
 
     console.log(`Session Attributes: ${JSON.stringify(sessionAttributes)}`);
 
     if (sessionAttributes.pets.length > 0) {
-      const speakOutput = `Hello, welcome back to Fat Cat.  Is it time to feed your pet?`;
+      const speakOutput = `Hello, welcome back to Fat Cat.  Is it time to feed ${name}?`;
       const repromptOutput = `I'm sorry, I didn't understand.  
       I can log a new event or tell you about an existing event.  Which would you like?`;
 
@@ -183,6 +184,12 @@ LastFedIntentHandler = {
 
       return handlerInput.responseBuilder
         .speak(wasFedTodayOutput)
+        .getResponse();
+    } else if (daysSinceLastFed === 1) {
+      const fedYesterdayOutput = `${name} was fed yesterday at ${lastFedTime.hour} ${lastFedTime.minutes} ${lastFedTime.amPm}`;
+
+      return handlerInput.responseBuilder
+        .speak(fedYesterdayOutput)
         .getResponse();
     } else {
       const moreThanADayAgoOutput = `${name} was last fed ${daysSinceLastFed} days ago at ${lastFedTime.hour} ${lastFedTime.minutes} ${lastFedTime.amPm}`;
