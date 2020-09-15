@@ -80,7 +80,7 @@ const LogEventIntentHandler = {
     const name = handlerInput.requestEnvelope.request.intent.slots.name.value;
     const attributesManager = handlerInput.attributesManager;
     const sessionAttributes = await attributesManager.getSessionAttributes();
-    const timeStamp = getTimeStamp(handlerInput);
+    const timeStamp = await getTimeStamp(handlerInput);
 
     //if getTimeStamp returned an error...
     if (timeStamp.name) {
@@ -113,7 +113,7 @@ const HasEatenTodayIntentHandler = {
     const attributesManager = handlerInput.attributesManager;
     const sessionAttributes = await attributesManager.getSessionAttributes();
     const { events } = sessionAttributes.logs[name];
-    const timeStamp = getTimeStamp(handlerInput);
+    const timeStamp = await getTimeStamp(handlerInput);
     let lastFedTime;
     let hasEaten = false;
 
