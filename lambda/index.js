@@ -179,13 +179,13 @@ LastFedIntentHandler = {
     }
 
     if (daysSinceLastFed < 1) {
-      const wasFedTodayOutput = `${name} was last fed at ${lastFedTime.hour} ${lastFedTime.minutes}`;
+      const wasFedTodayOutput = `${name} was last fed at ${lastFedTime.hour} ${lastFedTime.minutes} ${lastFedTime.amPm}`;
 
       return handlerInput.responseBuilder
         .speak(wasFedTodayOutput)
         .getResponse();
     } else {
-      const moreThanADayAgoOutput = `${name} was last fed ${daysSinceLastFed} days ago at ${lastFedTime.hour} ${lastFedTime.minutes}`;
+      const moreThanADayAgoOutput = `${name} was last fed ${daysSinceLastFed} days ago at ${lastFedTime.hour} ${lastFedTime.minutes} ${lastFedTime.amPm}`;
 
       return handlerInput.responseBuilder
         .speak(moreThanADayAgoOutput)
