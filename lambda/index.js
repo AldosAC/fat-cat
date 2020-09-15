@@ -211,18 +211,18 @@ const InitIntentHandler = {
   async handle(handlerInput) {
     const { attributesManager } = handlerInput;
     const sessionAttributes = await attributesManager.getSessionAttributes();
-    sessionAttributes.pets.push("tom");
-    sessionAttributes.pets.push("linda");
-    sessionAttributes.logs.tom = new Pet("tom");
-    sessionAttributes.logs.linda = new Pet("linda");
+    sessionAttributes.pets.push("Tom");
+    sessionAttributes.pets.push("Linda");
+    sessionAttributes.logs.Tom = new Pet("Tom");
+    sessionAttributes.logs.Linda = new Pet("Linda");
+    
+    const tomFed = await getSpecificTimeStamp(handlerInput, "September, 14 2020 14:24:00");
+    const lindaFed = await getSpecificTimeStamp(handlerInput, "September, 9 2020 18:46:00");
 
-    const tomFed = await getSpecificTimeStamp(handlerInput, "September 15th 2020 14:25:01");
-    const lindaFed = await getSpecificTimeStamp(handlerInput, "September 9th 2020 16:45:01");
+    sessionAttributes.logs.Tom.events.push({ type: "fed", time: tomFed });
+    sessionAttributes.logs.Linda.events.push({ type: "fed", time: lindaFed });
 
     console.log(`Session Attributes: ${JSON.stringify(sessionAttributes)}`);
-
-    sessionAttributes.logs.tom.events.push({ type: "fed", time: tomFed });
-    sessionAttributes.logs.linda.events.push({ type: "fed", time: lindaFed });
 
     attributesManager.setPersistentAttributes(sessionAttributes);
     attributesManager.savePersistentAttributes();
