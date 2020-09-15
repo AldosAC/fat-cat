@@ -111,7 +111,7 @@ const LoadPetInfoInterceptor = {
     const attributesManager = handlerInput.attributesManager;
     const sessionAttributes = await attributesManager.getPersistentAttributes();
 
-    if (sessionAttributes === {}) {
+    if (!sessionAttributes.pets) {
         console.log(`Session attributes are empty, initializing`)
       sessionAttributes.pets = [];
       sessionAttributes.logs = {};
