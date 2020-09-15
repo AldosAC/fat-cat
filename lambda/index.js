@@ -51,7 +51,7 @@ const RegisterPetIntentHandler = {
     const attributesManager = handlerInput.attributesManager;
     const sessionAttributes = await attributesManager.getSessionAttributes();
 
-    if (sessionAttributes.pets[name]) {
+    if (sessionAttributes.logs[name]) {
       const existsOutput = `I think we've already met, hello ${name}`
       console.log(`Register conflict: Pet exists`);
 
