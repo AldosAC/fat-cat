@@ -143,7 +143,7 @@ const HasEatenTodayIntentHandler = {
   }
 };
 
-LastFedIntentHandler = {
+const LastFedIntentHandler = {
   canHandle(handlerInput) {
     return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
       && Alexa.getIntentName(handlerInput.requestEnvelope) === 'LastFedIntent';
