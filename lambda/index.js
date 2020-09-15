@@ -5,6 +5,7 @@ const Alexa = require('ask-sdk-core');
 const persistenceAdapter = require('ask-sdk-s3-persistence-adapter');
 const { Pet } = require('./data/Pet');
 const { getTimeStamp } = require('./models/getTimeStamp');
+const { compareDates } = require('./controllers/compareDates');
 
 const LaunchRequestHandler = {
   canHandle(handlerInput) {
@@ -79,7 +80,12 @@ const LogEventIntentHandler = {
     const name = handlerInput.requestEnvelope.request.intent.slots.name.value;
     const attributesManager = handlerInput.attributesManager;
     const sessionAttributes = await attributesManager.getSessionAttributes();
-    const timeStamp = undefined;
+    const timeStamp = getTimeStamp(handlerInput);
+
+    //if getTimeStamp returned an error...
+    if (timeStamp.name) {
+      return handlerInput.responseBuilder.speak("There was a problem connecting to the service.").getResponse();
+    }
 
     sessionAttributes.logs[name].events.push({ type: "fed", time: timeStamp });
     attributesManager.setPersistentAttributes(sessionAttributes);
@@ -104,15 +110,24 @@ const HasEatenTodayIntentHandler = {
     const name = handlerInput.requestEnvelope.request.intent.slots.name.value;
     const attributesManager = handlerInput.attributesManager;
     const sessionAttributes = await attributesManager.getSessionAttributes();
-    const timeStamp = new Date(new Date().toLocaleString("en-US"));
     const { events } = sessionAttributes.logs[name];
     const lastFedTime = new Date(events[events.length - 1].time);
+    const timeStamp = getTimeStamp(handlerInput);
 
-    console.log(`HasEatenToday - timeStamp: ${timeStamp}, lastFedTime: ${lastFedTime}`);
+    //if getTimeStamp returned an error...
+    if (timeStamp.name) {
+      return handlerInput.responseBuilder.speak("There was a problem connecting to the service.").getResponse();
+    }
 
-    return handlerInput.responseBuilder
-      .speak(`Check console`)
-      .getResponse();
+    if (compareDates(timeStamp, lastFedTime) === 0) {
+      return handlerInput.responseBuilder
+        .speak(`Yes, ${name} has eaten today.`)
+        .getResponse();
+    } else {
+      return handlerInput.responseBuilder
+        .speak(`No, ${name} has not eaten today.`)
+        .getResponse();
+    }
   }
 }
 
