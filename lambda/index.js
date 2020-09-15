@@ -111,8 +111,8 @@ const HasEatenTodayIntentHandler = {
     const attributesManager = handlerInput.attributesManager;
     const sessionAttributes = await attributesManager.getSessionAttributes();
     const { events } = sessionAttributes.logs[name];
-    const lastFedTime;
     const timeStamp = getTimeStamp(handlerInput);
+    let lastFedTime;
     let hasEaten = false;
 
     //if getTimeStamp returned an error...
