@@ -6,33 +6,33 @@ const persistenceAdapter = require('ask-sdk-s3-persistence-adapter');
 const { Pet } = require('./data/Pet');
 
 const LaunchRequestHandler = {
-    canHandle(handlerInput) {
-        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'LaunchRequest';
-    },
-    async handle(handlerInput) {
-      const attributesManager = handlerInput.attributesManager;
-      const sessionAttributes = await attributesManager.getSessionAttributes();
+  canHandle(handlerInput) {
+    return Alexa.getRequestType(handlerInput.requestEnvelope) === 'LaunchRequest';
+  },
+  async handle(handlerInput) {
+    const attributesManager = handlerInput.attributesManager;
+    const sessionAttributes = await attributesManager.getSessionAttributes();
 
-      console.log(`Session Attributes: ${JSON.stringify(sessionAttributes)}`);
+    console.log(`Session Attributes: ${JSON.stringify(sessionAttributes)}`);
 
-      if (sessionAttributes.pets.length > 0) {
-        const speakOutput = `Hello, welcome back to Fat Cat.  Is it time to feed your pet?`;
-        const repromptOutput = `I'm sorry, I didn't understand.  
-        I can log a new event or tell you about an existing event.  Which would you like?`;
+    if (sessionAttributes.pets.length > 0) {
+      const speakOutput = `Hello, welcome back to Fat Cat.  Is it time to feed your pet?`;
+      const repromptOutput = `I'm sorry, I didn't understand.  
+      I can log a new event or tell you about an existing event.  Which would you like?`;
 
-        return handlerInput.responseBuilder
-            .speak(speakOutput)
-            .reprompt(repromptOutput)
-            .getResponse();
-      } else {
-        const speakOutput = 'Hello, welcome to Fat Cat.  To begin, introduce me to your pet!';
-        const repromptOutput = `I'm sorry, I didn't understand that.  My pet's name is Tango, what's yours?`;
-        return handlerInput.responseBuilder
-            .speak(speakOutput)
-            .reprompt(repromptOutput)
-            .getResponse();
-      }
+      return handlerInput.responseBuilder
+        .speak(speakOutput)
+        .reprompt(repromptOutput)
+        .getResponse();
+    } else {
+      const speakOutput = 'Hello, welcome to Fat Cat.  To begin, introduce me to your pet!';
+      const repromptOutput = `I'm sorry, I didn't understand that.  My pet's name is Tango, what's yours?`;
+      return handlerInput.responseBuilder
+        .speak(speakOutput)
+        .reprompt(repromptOutput)
+        .getResponse();
     }
+  }
 };
 
 const RegisterPetIntentHandler = {
@@ -69,42 +69,65 @@ const RegisterPetIntentHandler = {
   }
 };
 
-const HelpIntentHandler = {
-    canHandle(handlerInput) {
-        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'AMAZON.HelpIntent';
-    },
-    handle(handlerInput) {
-        const speakOutput = 'You can say hello to me! How can I help?';
+const LogEventIntentHandler = {
+  canHandle(handlerInput) {
+    return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
+      && Alexa.getIntentName(handlerInput.requestEnvelope) === 'AMAZON.HelpIntent';
+  },
+  async handle(handlerInput) {
+    const name = handlerInput.requestEnvelope.request.intent.slots.name.value;
+    const attributesManager = handlerInput.attributesManager;
+    const sessionAttributes = await attributesManager.getSessionAttributes();
+    const timeStamp = new Date(new Date().toLocaleString("en-US"));
 
-        return handlerInput.responseBuilder
-            .speak(speakOutput)
-            .reprompt(speakOutput)
-            .getResponse();
-    }
+    sessionAttributes.logs[name].events.push({ type: "fed", time: timeStamp });
+    attributesManager.setPersistentAttributes(sessionAttributes);
+    await attributesManager.savePersistentAttributes();
+
+    const speakOutput = `You got it!  Let's feed ${name}`;
+
+    return handlerInput.responseBuilder
+      .speak(speakOutput)
+      .getResponse();
+  }
+}
+
+const HelpIntentHandler = {
+  canHandle(handlerInput) {
+    return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
+      && Alexa.getIntentName(handlerInput.requestEnvelope) === 'AMAZON.HelpIntent';
+  },
+  handle(handlerInput) {
+    const speakOutput = 'You can say hello to me! How can I help?';
+
+    return handlerInput.responseBuilder
+      .speak(speakOutput)
+      .reprompt(speakOutput)
+      .getResponse();
+  }
 };
 const CancelAndStopIntentHandler = {
-    canHandle(handlerInput) {
-        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-            && (Alexa.getIntentName(handlerInput.requestEnvelope) === 'AMAZON.CancelIntent'
-                || Alexa.getIntentName(handlerInput.requestEnvelope) === 'AMAZON.StopIntent');
-    },
-    handle(handlerInput) {
-        const speakOutput = 'Goodbye!';
-        return handlerInput.responseBuilder
-            .speak(speakOutput)
-            .getResponse();
-    }
+  canHandle(handlerInput) {
+    return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
+      && (Alexa.getIntentName(handlerInput.requestEnvelope) === 'AMAZON.CancelIntent'
+        || Alexa.getIntentName(handlerInput.requestEnvelope) === 'AMAZON.StopIntent');
+  },
+  handle(handlerInput) {
+    const speakOutput = 'Goodbye!';
+    return handlerInput.responseBuilder
+      .speak(speakOutput)
+      .getResponse();
+  }
 };
 const SessionEndedRequestHandler = {
-    canHandle(handlerInput) {
-        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'SessionEndedRequest';
-    },
-    async handle(handlerInput) {
-        // Any cleanup logic goes here.
-        await handlerInput.attributesManager.savePersistentAttributes();
-        return handlerInput.responseBuilder.getResponse();
-    }
+  canHandle(handlerInput) {
+    return Alexa.getRequestType(handlerInput.requestEnvelope) === 'SessionEndedRequest';
+  },
+  async handle(handlerInput) {
+    // Any cleanup logic goes here.
+    await handlerInput.attributesManager.savePersistentAttributes();
+    return handlerInput.responseBuilder.getResponse();
+  }
 };
 
 // The intent reflector is used for interaction model testing and debugging.
