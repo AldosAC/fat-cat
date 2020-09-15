@@ -61,7 +61,6 @@ const RegisterPetIntentHandler = {
       sessionAttributes.logs[name] = new Pet(name);
       console.log(`Registered new pet`);
 
-      console.log(`S3 Bucket Name: ${process.env.S3_PERSISTENCE_BUCKET}`)
       await attributesManager.setPersistentAttributes(sessionAttributes);
       await attributesManager.savePersistentAttributes();
 
