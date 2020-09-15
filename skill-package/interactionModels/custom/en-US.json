@@ -55,12 +55,12 @@
           "name": "LogEventIntent",
           "slots": [
             {
-              "name": "verb",
-              "type": "PetActivities",
+              "name": "feed",
+              "type": "Fed",
               "samples": [
-                "I'd like to {verb} {name}",
-                "please {verb} {name}",
-                "{verb} {name}"
+                "I'd like to {feed} {name}",
+                "please {feed} {name}",
+                "{feed} {name}"
               ]
             },
             {
@@ -72,7 +72,10 @@
             }
           ],
           "samples": [
-            "{verb} {name}"
+            "lets {feed} {name}",
+            "it's time to {feed} {name}",
+            "tell {name} it's time to {feed}",
+            "{feed} {name}"
           ]
         },
         {
@@ -98,6 +101,33 @@
             "has {name} been fed today",
             "has {name} eaten yet"
           ]
+        },
+        {
+          "name": "LastFedIntent",
+          "slots": [
+            {
+              "name": "name",
+              "type": "AMAZON.FirstName",
+              "samples": [
+                "feed {name}",
+                "{name}"
+              ]
+            },
+            {
+              "name": "fed",
+              "type": "Fed"
+            },
+            {
+              "name": "subject",
+              "type": "Subject"
+            }
+          ],
+          "samples": [
+            "when did {subject} {fed} {name} last",
+            "when did {subject} last {fed} {name}",
+            "when was the last time {name} {fed}",
+            "when was {name} last {fed}"
+          ]
         }
       ],
       "types": [
@@ -105,17 +135,12 @@
           "values": [
             {
               "name": {
-                "value": "meds"
+                "value": "consume"
               }
             },
             {
               "name": {
-                "value": "pill"
-              }
-            },
-            {
-              "name": {
-                "value": "medication"
+                "value": "eats"
               }
             },
             {
@@ -145,21 +170,6 @@
             },
             {
               "name": {
-                "value": "breakfast"
-              }
-            },
-            {
-              "name": {
-                "value": "lunch"
-              }
-            },
-            {
-              "name": {
-                "value": "dinner"
-              }
-            },
-            {
-              "name": {
                 "value": "eat"
               }
             },
@@ -169,7 +179,42 @@
               }
             }
           ],
-          "name": "PetActivities"
+          "name": "Fed"
+        },
+        {
+          "values": [
+            {
+              "name": {
+                "value": "he"
+              }
+            },
+            {
+              "name": {
+                "value": "she"
+              }
+            },
+            {
+              "name": {
+                "value": "they"
+              }
+            },
+            {
+              "name": {
+                "value": "you"
+              }
+            },
+            {
+              "name": {
+                "value": "we"
+              }
+            },
+            {
+              "name": {
+                "value": "i"
+              }
+            }
+          ],
+          "name": "Subject"
         }
       ]
     },
@@ -197,8 +242,8 @@
           "prompts": {},
           "slots": [
             {
-              "name": "verb",
-              "type": "PetActivities",
+              "name": "feed",
+              "type": "Fed",
               "elicitationRequired": true,
               "confirmationRequired": false,
               "prompts": {
@@ -229,6 +274,36 @@
               "prompts": {
                 "elicitation": "Elicit.Slot.1547608947986.1564506619232"
               }
+            }
+          ]
+        },
+        {
+          "name": "LastFedIntent",
+          "confirmationRequired": false,
+          "prompts": {},
+          "slots": [
+            {
+              "name": "name",
+              "type": "AMAZON.FirstName",
+              "elicitationRequired": true,
+              "confirmationRequired": false,
+              "prompts": {
+                "elicitation": "Elicit.Slot.488242149276.23448536971"
+              }
+            },
+            {
+              "name": "fed",
+              "type": "Fed",
+              "elicitationRequired": false,
+              "confirmationRequired": false,
+              "prompts": {}
+            },
+            {
+              "name": "subject",
+              "type": "Subject",
+              "elicitationRequired": false,
+              "confirmationRequired": false,
+              "prompts": {}
             }
           ]
         }
@@ -275,8 +350,17 @@
             "value": "I'm sorry, can you repeat their name?"
           }
         ]
+      },
+      {
+        "id": "Elicit.Slot.488242149276.23448536971",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "I'm sorry, who did you want me to feed?"
+          }
+        ]
       }
     ]
   },
-  "version": "9"
+  "version": "11"
 }

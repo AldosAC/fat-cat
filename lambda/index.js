@@ -85,8 +85,6 @@ const LogEventIntentHandler = {
     //if getTimeStamp returned an error...
     if (timeStamp.name) {
       return handlerInput.responseBuilder.speak("There was a problem connecting to the service.").getResponse();
-    } else {
-      console.log(`Log Event timestamp: ${timeStamp}`);
     }
 
     sessionAttributes.logs[name].events.push({ type: "fed", time: timeStamp });
@@ -120,8 +118,6 @@ const HasEatenTodayIntentHandler = {
     //if getTimeStamp returned an error...
     if (timeStamp.name) {
       return handlerInput.responseBuilder.speak("There was a problem connecting to the service.").getResponse();
-    } else {
-      console.log(`HasEatenToday timestamp: ${timeStamp}`);
     }
 
     if (events.length > 0) {
@@ -142,7 +138,62 @@ const HasEatenTodayIntentHandler = {
         .getResponse();
     }
   }
-}
+};
+
+LastFedIntentHandler = {
+  canHandle(handlerInput) {
+    return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
+      && Alexa.getIntentName(handlerInput.requestEnvelope) === 'LastFedIntent';
+  },
+  handle(handlerInput) {
+    const name = handlerInput.requestEnvelope.request.intent.slots.name.value;
+    const { attributesManager } = handlerInput;
+    const sessionAttributes = await attributesManager.getSessionAttributes();
+
+    if (sessionAttributes.logs[name] === undefined) {
+      const petNotFoundOutput = `I'm sorry, I don't think I've met ${name} yet.  Would you mind introducing us?`;
+
+      return handlerInput.responseBuilder
+        .speak(petNotFoundOutput)
+        .getResponse();
+    }
+
+    const { events } = sessionAttributes.logs[name];
+
+    if (events.length === 0) {
+      const noEventsOutput = `I'm sorry, I'm not sure when ${name} ate last`;
+
+      return handlerInput.responseBuilder
+        .speak(noEventsOutput)
+        .getResponse();
+    }
+
+    const lastFedTimeStamp = new Date(events[events.length - 1].time);
+    const lastFedDay = lastFedTimeStamp.getDay();
+    const lastFedMonth = lastFedTimeStamp.getMonth();
+    const lastFedTime = { hour: lastFedTimeStamp.getHours(), minutes: lastFedTimeStamp.getMinutes()}
+    const timeStamp = getTimeStamp();
+    let daysSinceLastFed = compareDates(timeStamp, lastFedTimeStamp);
+
+    if (timeStamp.name) {
+      return handlerInput.responseBuilder.speak("There was a problem connecting to the service.").getResponse();
+    }
+
+    if (daysSinceLastFed < 1) {
+      const wasFedTodayOutput = `${name} was last fed at ${lastFedTime.hour} ${lastFedTime.minutes}`;
+
+      return handlerInput.responseBuilder
+        .speak(wasFedTodayOutput)
+        .getResponse();
+    } else {
+      const moreThanADayAgoOutput = `${name} was last fed ${daysSinceLastFed} days ago at ${lastFedTime.hour} ${lastFedTime.minutes}`;
+
+      return handlerInput.responseBuilder
+        .speak(moreThanADayAgoOutput)
+        .getResponse();
+    }
+  }
+};
 
 const HelpIntentHandler = {
   canHandle(handlerInput) {
@@ -251,6 +302,7 @@ exports.handler = Alexa.SkillBuilders.custom()
       RegisterPetIntentHandler,
       LogEventIntentHandler,
       HasEatenTodayIntentHandler,
+      LastFedIntentHandler,
       HelpIntentHandler,
       CancelAndStopIntentHandler,
       SessionEndedRequestHandler,
