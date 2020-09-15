@@ -5,7 +5,11 @@
       "intents": [
         {
           "name": "AMAZON.CancelIntent",
-          "samples": []
+          "samples": [
+            "nevermind",
+            "don't do that",
+            "cancel"
+          ]
         },
         {
           "name": "AMAZON.HelpIntent",
@@ -13,7 +17,13 @@
         },
         {
           "name": "AMAZON.StopIntent",
-          "samples": []
+          "samples": [
+            "stop",
+            "exit",
+            "quit",
+            "goodbye",
+            "goodbye fat cat"
+          ]
         },
         {
           "name": "AMAZON.NavigateHomeIntent",
@@ -63,6 +73,30 @@
           ],
           "samples": [
             "{verb} {name}"
+          ]
+        },
+        {
+          "name": "HasEatenTodayIntent",
+          "slots": [
+            {
+              "name": "name",
+              "type": "AMAZON.FirstName",
+              "samples": [
+                "{name}",
+                "their name is {name}",
+                "I was asking about {name}",
+                "have we fed {name} yet",
+                "has {name} eaten yet",
+                "have we fed {name} today",
+                "I said {name}"
+              ]
+            }
+          ],
+          "samples": [
+            "has {name} eaten today",
+            "have we fed {name} today",
+            "has {name} been fed today",
+            "has {name} eaten yet"
           ]
         }
       ],
@@ -181,6 +215,22 @@
               }
             }
           ]
+        },
+        {
+          "name": "HasEatenTodayIntent",
+          "confirmationRequired": false,
+          "prompts": {},
+          "slots": [
+            {
+              "name": "name",
+              "type": "AMAZON.FirstName",
+              "elicitationRequired": true,
+              "confirmationRequired": false,
+              "prompts": {
+                "elicitation": "Elicit.Slot.1547608947986.1564506619232"
+              }
+            }
+          ]
         }
       ],
       "delegationStrategy": "ALWAYS"
@@ -212,8 +262,21 @@
             "value": "I'm sorry, I didn't understand your pet's name correctly.  Could you repeat that?"
           }
         ]
+      },
+      {
+        "id": "Elicit.Slot.1547608947986.1564506619232",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "Who were you asking about?"
+          },
+          {
+            "type": "PlainText",
+            "value": "I'm sorry, can you repeat their name?"
+          }
+        ]
       }
     ]
   },
-  "version": "7"
+  "version": "9"
 }

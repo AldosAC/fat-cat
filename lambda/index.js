@@ -95,7 +95,24 @@ const LogEventIntentHandler = {
 // Queries
 
 const HasEatenTodayIntentHandler = {
+  canHandle(handlerInput) {
+    return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
+      && Alexa.getIntentName(handlerInput.requestEnvelope) === 'HasEatenTodayIntent';
+  },
+  async handle (handlerInput) {
+    const name = handlerInput.requestEnvelope.request.intent.slots.name.value;
+    const attributesManager = handlerInput.attributesManager;
+    const sessionAttributes = await attributesManager.getSessionAttributes();
+    const timeStamp = new Date(new Date().toLocaleString("en-US"));
+    const { events } = sessionAttributes.logs[name];
+    const lastFedTime = new Date(events[events.length - 1].time);
 
+    console.log(`HasEatenToday - timeStamp: ${timeStamp}, lastFedTime: ${lastFedTime}`);
+
+    return handlerInput.responseBuilder
+      .speak(`Check console`)
+      .getResponse();
+  }
 }
 
 const HelpIntentHandler = {
