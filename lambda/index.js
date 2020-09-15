@@ -13,12 +13,12 @@ const LaunchRequestHandler = {
       const attributesManager = handlerInput.attributesManager;
       const sessionAttributes = await attributesManager.getSessionAttributes() || { pets: [], logs: {} };
 
+      console.log(`Session Attributes: ${JSON.stringify(sessionAttributes)}`);
+
       if (sessionAttributes.pets.length > 0) {
         const speakOutput = `Hello, welcome back to Fat Cat.  Is it time to feed your pet?`;
         const repromptOutput = `I'm sorry, I didn't understand.  
         I can log a new event or tell you about an existing event.  Which would you like?`;
-
-        console.log(`Session Attributes: ${JSON.stringify(sessionAttributes)}`);
 
         return handlerInput.responseBuilder
             .speak(speakOutput)
@@ -111,12 +111,8 @@ const LoadPetInfoInterceptor = {
     const attributesManager = handlerInput.attributesManager;
     const sessionAttributes = await attributesManager.getPersistentAttributes() || { pets: [], logs: {} };
 
-    const pets = sessionAttributes.hasOwnProperty(`pets`) ? sessionAttributes.pets : [];
-    const logs = sessionAttributes.hasOwnProperty(`logs`) ? sessionAttributes.logs : {};
-
-    if (pets && logs) {
-      attributesManager.setSessionAttributes(sessionAttributes);
-    }
+    console.log(`Session Attributes: ${JSON.stringify(sessionAttributes)}`);
+    attributesManager.setSessionAttributes(sessionAttributes);
   }
 }
 
