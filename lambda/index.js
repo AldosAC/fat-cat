@@ -216,8 +216,10 @@ const InitIntentHandler = {
     sessionAttributes.logs.tom = new Pet("tom");
     sessionAttributes.logs.tom = new Pet("linda");
 
-    const tomFed = getSpecificTimeStamp(handlerInput, "September 15th 2020 14:25:01");
-    const lindaFed = getSpecificTimeStamp(handlerInput, "September 9th 2020 16:45:01");
+    const tomFed = await getSpecificTimeStamp(handlerInput, "September 15th 2020 14:25:01");
+    const lindaFed = await getSpecificTimeStamp(handlerInput, "September 9th 2020 16:45:01");
+
+    console.log(`Session Attributes: ${JSON.stringify(sessionAttributes)}`);
 
     sessionAttributes.logs.tom.events.push({ type: "fed", time: tomFed });
     sessionAttributes.logs.linda.events.push({ type: "fed", time: lindaFed });
