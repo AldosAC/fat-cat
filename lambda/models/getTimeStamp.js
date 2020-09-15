@@ -3,6 +3,7 @@ const Alexa = require('ask-sdk-core');
 module.exports.getTimeStamp = async (handlerInput) => {
   const deviceId = Alexa.getDeviceId(handlerInput.requestEnvelope);
   let userTimeZone;
+  let timeStamp;
 
   try {
     const upsServiceClient = handlerInput.serviceClientFactory.getUpsServiceClient();
@@ -14,5 +15,7 @@ module.exports.getTimeStamp = async (handlerInput) => {
     console.log('error', error.message);
   }
 
-  return new Date(new Date().toLocaleString("en-US", {timeZone: userTimeZone}));
+  timeStamp = new Date(new Date().toLocaleString("en-US", {timeZone: userTimeZone}));
+
+  return timeStamp;
 }

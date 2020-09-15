@@ -85,6 +85,8 @@ const LogEventIntentHandler = {
     //if getTimeStamp returned an error...
     if (timeStamp.name) {
       return handlerInput.responseBuilder.speak("There was a problem connecting to the service.").getResponse();
+    } else {
+      console.log(`Log Event timestamp: ${timeStamp}`);
     }
 
     sessionAttributes.logs[name].events.push({ type: "fed", time: timeStamp });
@@ -118,10 +120,12 @@ const HasEatenTodayIntentHandler = {
     //if getTimeStamp returned an error...
     if (timeStamp.name) {
       return handlerInput.responseBuilder.speak("There was a problem connecting to the service.").getResponse();
+    } else {
+      console.log(`HasEatenToday timestamp: ${timeStamp}`);
     }
 
     if (events.length > 0) {
-      lastFedTime = new Date(events[events.length - 1].time)
+      lastFedTime = new Date(events[events.length - 1].time);
 
       if (compareDates(timeStamp, lastFedTime) === 0) {
         hasEaten = true;
