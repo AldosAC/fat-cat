@@ -84,12 +84,18 @@ const LogEventIntentHandler = {
     attributesManager.setPersistentAttributes(sessionAttributes);
     await attributesManager.savePersistentAttributes();
 
-    const speakOutput = `You got it!  Let's feed ${name}`;
+    const speakOutput = `You got it!  ${name}, it's time to eat!`;
 
     return handlerInput.responseBuilder
       .speak(speakOutput)
       .getResponse();
   }
+};
+
+// Queries
+
+const HasEatenTodayIntentHandler = {
+
 }
 
 const HelpIntentHandler = {
@@ -197,6 +203,7 @@ exports.handler = Alexa.SkillBuilders.custom()
       LaunchRequestHandler,
       RegisterPetIntentHandler,
       LogEventIntentHandler,
+      HasEatenTodayIntentHandler,
       HelpIntentHandler,
       CancelAndStopIntentHandler,
       SessionEndedRequestHandler,
