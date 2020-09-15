@@ -27,7 +27,7 @@ const LaunchRequestHandler = {
       <amazon:effect name="whispered">Tom?<break time="0.5s" />  <prosody rate="slow">Are you okay?</prosody></amazon:effect>.`
 
       return handlerInput.responseBuilder
-        .speak(testOutput)
+        .speak(speakOutput)
         .reprompt(repromptOutput)
         .getResponse();
     } else {
@@ -193,7 +193,8 @@ LastFedIntentHandler = {
         .speak(fedYesterdayOutput)
         .getResponse();
     } else {
-      const moreThanADayAgoOutput = `${name} was last fed ${daysSinceLastFed} days ago at ${lastFedTime.hour} ${lastFedTime.minutes} ${lastFedTime.amPm}`;
+      const moreThanADayAgoOutput = `${name} was last fed ${daysSinceLastFed} days ago. <break time="0.5s" />
+      <amazon:effect name="whispered">${name}?<break time="0.5s" />  <prosody rate="slow">Are you okay?</prosody></amazon:effect>.`;
 
       return handlerInput.responseBuilder
         .speak(moreThanADayAgoOutput)
