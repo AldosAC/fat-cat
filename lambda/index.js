@@ -145,7 +145,7 @@ LastFedIntentHandler = {
     return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
       && Alexa.getIntentName(handlerInput.requestEnvelope) === 'LastFedIntent';
   },
-  handle(handlerInput) {
+  async handle(handlerInput) {
     const name = handlerInput.requestEnvelope.request.intent.slots.name.value;
     const { attributesManager } = handlerInput;
     const sessionAttributes = await attributesManager.getSessionAttributes();
