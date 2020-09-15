@@ -111,15 +111,24 @@ const HasEatenTodayIntentHandler = {
     const attributesManager = handlerInput.attributesManager;
     const sessionAttributes = await attributesManager.getSessionAttributes();
     const { events } = sessionAttributes.logs[name];
-    const lastFedTime = new Date(events[events.length - 1].time);
+    const lastFedTime;
     const timeStamp = getTimeStamp(handlerInput);
+    let hasEaten = false;
 
     //if getTimeStamp returned an error...
     if (timeStamp.name) {
       return handlerInput.responseBuilder.speak("There was a problem connecting to the service.").getResponse();
     }
 
+    if (events.length > 0) {
+      lastFedTime = new Date(events[events.length - 1].time)
+    }
+
     if (compareDates(timeStamp, lastFedTime) === 0) {
+      hasEaten = true;
+    }
+
+    if (hasEaten) {
       return handlerInput.responseBuilder
         .speak(`Yes, ${name} has eaten today.`)
         .getResponse();
