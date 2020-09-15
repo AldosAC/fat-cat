@@ -111,8 +111,8 @@ const LoadPetInfoInterceptor = {
     const attributesManager = handlerInput.attributesManager;
     const sessionAttributes = await attributesManager.getPersistentAttributes() || { pets: [], logs: {} };
 
-    const pets = sessionAttributes.hasOwnProperty(pets) ? sessionAttributes.pets : [];
-    const logs = sessionAttributes.hasOwnProperty(logs) ? sessionAttributes.logs : {};
+    const pets = sessionAttributes.hasOwnProperty(`pets`) ? sessionAttributes.pets : [];
+    const logs = sessionAttributes.hasOwnProperty(`logs`) ? sessionAttributes.logs : {};
 
     if (pets && logs) {
       attributesManager.setSessionAttributes(sessionAttributes);
