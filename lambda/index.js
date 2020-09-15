@@ -23,9 +23,11 @@ const LaunchRequestHandler = {
       const speakOutput = `Hello, welcome back to Fat Cat.  Is it time to feed ${name}?`;
       const repromptOutput = `I'm sorry, I didn't understand.  
       I can log a new event or tell you about an existing event.  Which would you like?`;
+      const testOutput = `Tom was last fed 12 days ago. <break time="0.5s" />
+      <amazon:effect name="whispered">Tom?<break time="0.5s" />  <prosody rate="slow">Are you okay?</prosody></amazon:effect>.`
 
       return handlerInput.responseBuilder
-        .speak(speakOutput)
+        .speak(testOutput)
         .reprompt(repromptOutput)
         .getResponse();
     } else {
