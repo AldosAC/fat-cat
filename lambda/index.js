@@ -172,7 +172,7 @@ LastFedIntentHandler = {
     const lastFedDay = lastFedTimeStamp.getDay();
     const lastFedMonth = lastFedTimeStamp.getMonth();
     const lastFedTime = { hour: lastFedTimeStamp.getHours(), minutes: lastFedTimeStamp.getMinutes()}
-    const timeStamp = getTimeStamp();
+    const timeStamp = await getTimeStamp();
     let daysSinceLastFed = compareDates(timeStamp, lastFedTimeStamp);
 
     if (timeStamp.name) {
