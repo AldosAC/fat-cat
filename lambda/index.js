@@ -122,10 +122,10 @@ const HasEatenTodayIntentHandler = {
 
     if (events.length > 0) {
       lastFedTime = new Date(events[events.length - 1].time)
-    }
 
-    if (compareDates(timeStamp, lastFedTime) === 0) {
-      hasEaten = true;
+      if (compareDates(timeStamp, lastFedTime) === 0) {
+        hasEaten = true;
+      }
     }
 
     if (hasEaten) {
