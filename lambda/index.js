@@ -59,6 +59,7 @@ const RegisterPetIntentHandler = {
 
       console.log(`S3 Bucket Name: ${process.env.S3_PERSISTENCE_BUCKET}`)
       await attributesManager.setPersistentAttributes(sessionAttributes);
+      await attributesManager.savePersistentAttributes();
 
       const speakOutput = `It's nice to meet you ${name}!`
       return handlerInput.responseBuilder
