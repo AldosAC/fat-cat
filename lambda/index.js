@@ -106,21 +106,6 @@ const SessionEndedRequestHandler = {
     }
 };
 
-const LoadPetInfoInterceptor = {
-  async process(handlerInput) {
-    const attributesManager = handlerInput.attributesManager;
-    const sessionAttributes = await attributesManager.getPersistentAttributes();
-
-    if (sessionAttributes === {}) {
-      sessionAttributes.pets = [];
-      sessionAttributes.logs = {};
-    }
-
-    console.log(`Session Attributes: ${JSON.stringify(sessionAttributes)}`);
-    attributesManager.setSessionAttributes(sessionAttributes);
-  }
-}
-
 // The intent reflector is used for interaction model testing and debugging.
 // It will simply repeat the intent the user said. You can create custom handlers
 // for your intents by defining them above, then also adding them to the request
@@ -157,6 +142,22 @@ const ErrorHandler = {
             .getResponse();
     }
 };
+
+const LoadPetInfoInterceptor = {
+  async process(handlerInput) {
+    const attributesManager = handlerInput.attributesManager;
+    const sessionAttributes = await attributesManager.getPersistentAttributes();
+
+    if (!sessionAttributes.pets) {
+      console.log(`Session attributes are empty, initializing`)
+      sessionAttributes.pets = [];
+      sessionAttributes.logs = {};
+    }
+
+    console.log(`Session Attributes: ${JSON.stringify(sessionAttributes)}`);
+    attributesManager.setSessionAttributes(sessionAttributes);
+  }
+}
 
 // The SkillBuilder acts as the entry point for your skill, routing all request and response
 // payloads to the handlers above. Make sure any new handlers or interceptors you've
