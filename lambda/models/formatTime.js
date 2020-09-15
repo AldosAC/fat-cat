@@ -3,7 +3,7 @@ module.exports.formatTime = (timeStamp) => {
   let minutes = timeStamp.getMinutes();
   let amPm;
 
-  if (hours > 12) {
+  if (hour > 12) {
     hour = hour - 12;
     amPm = "PM";
   } else {
