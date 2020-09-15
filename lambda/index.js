@@ -4,7 +4,7 @@
 const Alexa = require('ask-sdk-core');
 const persistenceAdapter = require('ask-sdk-s3-persistence-adapter');
 const { Pet } = require('./data/Pet');
-const { getTimeStamp } = require('./models/getTimeStamp');
+const { getTimeStamp, getSpecificTimeStamp } = require('./models/getTimeStamp');
 const { compareDates } = require('./controllers/compareDates');
 const { formatTime } = require('./models/formatTime');
 
@@ -202,6 +202,35 @@ LastFedIntentHandler = {
     }
   }
 };
+
+const InitIntentHandler = {
+  canHandle(handlerInput) {
+    return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
+      && Alexa.getIntentName(handlerInput.requestEnvelope) === 'InitIntent';
+  },
+  async handle(handlerInput) {
+    const { attributesManager } = handlerInput;
+    const sessionAttributes = await attributesManager.getSessionAttributes();
+    sessionAttributes.pets.push("tom");
+    sessionAttributes.pets.push("linda");
+    sessionAttributes.logs.tom = new Pet("tom");
+    sessionAttributes.logs.tom = new Pet("linda");
+
+    const tomFed = getSpecificTimeStamp(handlerInput, "September 15th 2020 14:25:01");
+    const lindaFed = getSpecificTimeStamp(handlerInput, "September 9th 2020 16:45:01");
+
+    sessionAttributes.logs.tom.events.push({ type: "fed", time: tomFed });
+    sessionAttributes.logs.linda.events.push({ type: "fed", time: lindaFed });
+
+    attributesManager.setPersistentAttributes(sessionAttributes);
+    attributesManager.savePersistentAttributes();
+
+    return handlerInput.responseBuilder
+      .speak(`Pet data has been initialized`)
+      .getResponse();
+
+  }
+}
 
 const HelpIntentHandler = {
   canHandle(handlerInput) {

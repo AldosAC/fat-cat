@@ -128,6 +128,13 @@
             "when was the last time {name} {fed}",
             "when was {name} last {fed}"
           ]
+        },
+        {
+          "name": "InitIntent",
+          "slots": [],
+          "samples": [
+            "initialize pet data"
+          ]
         }
       ],
       "types": [
@@ -362,5 +369,5 @@
       }
     ]
   },
-  "version": "11"
+  "version": "12"
 }
