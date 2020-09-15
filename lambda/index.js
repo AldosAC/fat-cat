@@ -340,6 +340,7 @@ exports.handler = Alexa.SkillBuilders.custom()
       LogEventIntentHandler,
       HasEatenTodayIntentHandler,
       LastFedIntentHandler,
+      InitIntentHandler,
       HelpIntentHandler,
       CancelAndStopIntentHandler,
       SessionEndedRequestHandler,
