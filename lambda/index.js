@@ -72,7 +72,7 @@ const RegisterPetIntentHandler = {
 const LogEventIntentHandler = {
   canHandle(handlerInput) {
     return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
-      && Alexa.getIntentName(handlerInput.requestEnvelope) === 'AMAZON.HelpIntent';
+      && Alexa.getIntentName(handlerInput.requestEnvelope) === 'LogEventIntent';
   },
   async handle(handlerInput) {
     const name = handlerInput.requestEnvelope.request.intent.slots.name.value;
