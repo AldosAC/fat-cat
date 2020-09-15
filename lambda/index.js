@@ -11,7 +11,7 @@ const LaunchRequestHandler = {
     },
     async handle(handlerInput) {
       const attributesManager = handlerInput.attributesManager;
-      const sessionAttributes = await attributesManager.getSessionAttributes() || { pets: [], logs: {} };
+      const sessionAttributes = await attributesManager.getSessionAttributes();
 
       console.log(`Session Attributes: ${JSON.stringify(sessionAttributes)}`);
 
@@ -43,7 +43,7 @@ const RegisterPetIntentHandler = {
   async handle(handlerInput) {
     const name = handlerInput.requestEnvelope.request.intent.slots.name.value;
     const attributesManager = handlerInput.attributesManager;
-    const sessionAttributes = await attributesManager.getSessionAttributes() || { pets: [], logs: {} };
+    const sessionAttributes = await attributesManager.getSessionAttributes();
 
     if (sessionAttributes.pets[name]) {
       const existsOutput = `I think we've already met, hello ${name}`
@@ -109,7 +109,12 @@ const SessionEndedRequestHandler = {
 const LoadPetInfoInterceptor = {
   async process(handlerInput) {
     const attributesManager = handlerInput.attributesManager;
-    const sessionAttributes = await attributesManager.getPersistentAttributes() || { pets: [], logs: {} };
+    const sessionAttributes = await attributesManager.getPersistentAttributes();
+
+    if (sessionAttributes === {}) {
+      sessionAttributes.pets = [];
+      sessionAttributes.logs = {};
+    }
 
     console.log(`Session Attributes: ${JSON.stringify(sessionAttributes)}`);
     attributesManager.setSessionAttributes(sessionAttributes);
