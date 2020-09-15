@@ -214,7 +214,7 @@ const InitIntentHandler = {
     sessionAttributes.pets.push("tom");
     sessionAttributes.pets.push("linda");
     sessionAttributes.logs.tom = new Pet("tom");
-    sessionAttributes.logs.tom = new Pet("linda");
+    sessionAttributes.logs.linda = new Pet("linda");
 
     const tomFed = await getSpecificTimeStamp(handlerInput, "September 15th 2020 14:25:01");
     const lindaFed = await getSpecificTimeStamp(handlerInput, "September 9th 2020 16:45:01");
