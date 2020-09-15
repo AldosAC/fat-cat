@@ -4,6 +4,7 @@
 const Alexa = require('ask-sdk-core');
 const persistenceAdapter = require('ask-sdk-s3-persistence-adapter');
 const { Pet } = require('./data/Pet');
+const { getTimeStamp } = require('./models/getTimeStamp');
 
 const LaunchRequestHandler = {
   canHandle(handlerInput) {
@@ -78,7 +79,7 @@ const LogEventIntentHandler = {
     const name = handlerInput.requestEnvelope.request.intent.slots.name.value;
     const attributesManager = handlerInput.attributesManager;
     const sessionAttributes = await attributesManager.getSessionAttributes();
-    const timeStamp = new Date(new Date().toLocaleString("en-US"));
+    const timeStamp = undefined;
 
     sessionAttributes.logs[name].events.push({ type: "fed", time: timeStamp });
     attributesManager.setPersistentAttributes(sessionAttributes);
@@ -213,6 +214,7 @@ const LoadPetInfoInterceptor = {
 // payloads to the handlers above. Make sure any new handlers or interceptors you've
 // defined are included below. The order matters - they're processed top to bottom.
 exports.handler = Alexa.SkillBuilders.custom()
+    .withApiClient(new Alexa.DefaultApiClient())
     .withPersistenceAdapter(
       new persistenceAdapter.S3PersistenceAdapter({bucketName:process.env.S3_PERSISTENCE_BUCKET})
     )
