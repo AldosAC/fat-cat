@@ -2,6 +2,8 @@
 
 Fat Cat is the Alexa skill for fact checking your fat cat.  Think your girlfriend fed your cat this morning, but your cat's acting like it hasn't eaten in a week?  Fat Cat can help get to the bottom of it.
 
+I'll be adding more content as my free time allows, if you're curious about planned features please check out the Features board to see the current list and the progress made towards them.
+
 ## Table of Contents
 1. Installation
 2. Usage
